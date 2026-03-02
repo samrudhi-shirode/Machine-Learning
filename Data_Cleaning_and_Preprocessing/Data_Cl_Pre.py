@@ -5,7 +5,7 @@ from sklearn.compose import ColumnTransformer
 
 def data_preparation_cat_con(X):
 
-    cat = list(X.select_dtypes(include='category').columns) # include='str'
+    cat = list(X.select_dtypes(include='str').columns) # include='str'
     con = list(X.select_dtypes(include='number').columns)
 
     num_pipe = make_pipeline(
