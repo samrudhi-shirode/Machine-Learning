@@ -1,98 +1,104 @@
 import streamlit as st
-import pandas as pd
 import joblib
+import pandas as pd
 
-# -----------------------------
-# Load saved model and pipeline
-# -----------------------------
-model = joblib.load("model.joblib")
-pre = joblib.load("pre.joblib")
-
-# -----------------------------
-# Page Configuration
-# -----------------------------
+# Page configuration
 st.set_page_config(
     page_title="Machine Failure Prediction",
     page_icon="⚙️",
     layout="wide"
 )
 
-# -----------------------------
-# Custom CSS Design
-# -----------------------------
+# ---------------- CSS Styling ---------------- #
+
 st.markdown("""
 <style>
 
-.main {
-background-color:#f5f7fb;
+.main{
+background: linear-gradient(120deg,#eef2f7,#f8fbff);
 }
 
 .title{
 text-align:center;
-font-size:40px;
+font-size:45px;
 font-weight:bold;
-color:#2c3e50;
+color:#1f4e79;
 }
 
 .subtitle{
 text-align:center;
-font-size:18px;
+font-size:20px;
 color:gray;
-margin-bottom:40px;
+margin-bottom:30px;
 }
 
-.card{
-background-color:white;
-padding:30px;
-border-radius:15px;
-box-shadow:0px 0px 10px rgba(0,0,0,0.1);
+div.stButton > button:first-child {
+background: linear-gradient(90deg,#ff7e5f,#feb47b);
+color:white;
+font-size:18px;
+font-weight:bold;
+border-radius:12px;
+padding:12px 35px;
+border:none;
+}
+
+div.stButton > button:hover {
+background: linear-gradient(90deg,#ff6a4a,#ff9966);
+color:white;
 }
 
 .result-success{
-color:green;
-font-size:30px;
-font-weight:bold;
+background:#d4edda;
+padding:18px;
+border-radius:10px;
+font-size:22px;
+color:#155724;
 text-align:center;
 }
 
 .result-danger{
-color:red;
-font-size:30px;
-font-weight:bold;
+background:#f8d7da;
+padding:18px;
+border-radius:10px;
+font-size:22px;
+color:#721c24;
 text-align:center;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-# -----------------------------
-# Title
-# -----------------------------
-st.markdown('<p class="title">⚙️ Machine Failure Prediction System</p>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">AI based predictive maintenance model</p>', unsafe_allow_html=True)
+# ---------------- Title ---------------- #
 
-# -----------------------------
-# Input Section
-# -----------------------------
-st.markdown('<div class="card">', unsafe_allow_html=True)
+st.markdown('<p class="title">⚙️ Machine Failure Prediction</p>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">Predictive Maintenance using Machine Learning</p>', unsafe_allow_html=True)
+
+st.write("### 👩‍💻 Developed By: **Samrudhi Shirode**")
+
+# ---------------- Load Model ---------------- #
+
+pre = joblib.load("pre.joblib")
+model = joblib.load("model.joblib")
+
+# ---------------- Input Layout ---------------- #
 
 col1, col2 = st.columns(2)
 
 with col1:
-
-    type_machine = st.selectbox(
+    
+    Machine_Type = st.selectbox(
         "Machine Type",
         ["L","M","H"]
     )
 
-    air_temp = st.number_input(
+    Air_Temp = st.number_input(
         "Air Temperature (K)",
         min_value=290.0,
         max_value=320.0,
         value=300.0
     )
 
-    process_temp = st.number_input(
+    Process_Temp = st.number_input(
         "Process Temperature (K)",
         min_value=300.0,
         max_value=330.0,
@@ -101,61 +107,59 @@ with col1:
 
 with col2:
 
-    rotational_speed = st.number_input(
+    Rotational_Speed = st.number_input(
         "Rotational Speed (rpm)",
         min_value=1000,
         max_value=3000,
         value=1500
     )
 
-    torque = st.number_input(
+    Torque = st.number_input(
         "Torque (Nm)",
         min_value=0.0,
         max_value=100.0,
         value=40.0
     )
 
-    tool_wear = st.number_input(
+    Tool_Wear = st.number_input(
         "Tool Wear (min)",
         min_value=0,
         max_value=300,
         value=50
     )
 
-st.markdown("</div>", unsafe_allow_html=True)
-
-# -----------------------------
-# Prediction Button
-# -----------------------------
 st.write("")
 
-if st.button("🔍 Predict Machine Failure"):
+# ---------------- Prediction Button ---------------- #
 
-    input_data = pd.DataFrame({
-        "Type":[type_machine],
-        "Air temperature [K]":[air_temp],
-        "Process temperature [K]":[process_temp],
-        "Rotational speed [rpm]":[rotational_speed],
-        "Torque [Nm]":[torque],
-        "Tool wear [min]":[tool_wear]
-    })
+submit = st.button("🔍 Predict Machine Failure")
 
-    # preprocessing
-    input_pre = pre.transform(input_data)
+if submit:
 
-    # prediction
-    prediction = model.predict(input_pre)
+    data = {
+        "Type":[Machine_Type],
+        "Air temperature [K]":[Air_Temp],
+        "Process temperature [K]":[Process_Temp],
+        "Rotational speed [rpm]":[Rotational_Speed],
+        "Torque [Nm]":[Torque],
+        "Tool wear [min]":[Tool_Wear]
+    }
+
+    xnew = pd.DataFrame(data)
+
+    xnew_pre = pre.transform(xnew)
+
+    preds = model.predict(xnew_pre)
 
     st.write("")
 
-    if prediction[0] == 1:
-
+    if preds[0] == 1:
         st.markdown(
-        '<p class="result-danger">⚠️ Machine Failure Likely</p>',
-        unsafe_allow_html=True)
-
+            '<p class="result-danger">⚠️ Machine Failure Likely</p>',
+            unsafe_allow_html=True
+        )
     else:
-
         st.markdown(
-        '<p class="result-success">✅ Machine Working Normally</p>',
-        unsafe_allow_html=True)
+            '<p class="result-success">✅ Machine Working Normally</p>',
+            unsafe_allow_html=True
+        )
