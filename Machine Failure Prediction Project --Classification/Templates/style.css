@@ -1,0 +1,65 @@
+/* Background styling */
+.stApp {
+    background: linear-gradient(120deg,#f5f7fa,#e4ecf7);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Title styling */
+h1 {
+    text-align: center;
+    color: #1f4e79;
+    font-size: 42px;
+    font-weight: bold;
+}
+
+/* Subheader styling */
+h3 {
+    text-align: center;
+    color: #555;
+}
+
+/* Input boxes */
+.stNumberInput input, .stSelectbox div[data-baseweb="select"] {
+    border-radius: 8px !important;
+    border: 1px solid #ccc !important;
+}
+
+/* Fancy Button */
+div.stButton > button {
+    background: linear-gradient(90deg,#ff7e5f,#feb47b);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 25px;
+    border: none;
+    transition: 0.3s;
+}
+
+/* Button hover effect */
+div.stButton > button:hover {
+    background: linear-gradient(90deg,#ff6a4a,#ff9966);
+    transform: scale(1.05);
+}
+
+/* Success message */
+div[data-testid="stMarkdownContainer"] p[key="styledtextnotfail"] {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Failure message */
+div[data-testid="stMarkdownContainer"] p[key="styledtextfail"] {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+}

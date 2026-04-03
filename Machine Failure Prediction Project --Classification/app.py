@@ -67,8 +67,3 @@ if submit:
         op = 'Machine will not fail'
         st.subheader(op, key="styledtextnotfail")
        
-    
-
-    
-
-
